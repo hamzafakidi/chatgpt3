@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد ذكاء اصطناعي</title>
+    <script>
+        async function sendMessage() {
+            const userMessage = document.getElementById("userMessage").value;
+            const response = await fetch("/ask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+            const chat = document.getElementById("chat");
+            if (data.reply) {
+                chat.innerHTML += `<p><b>أنت:</b> ${userMessage}</p>`;
+                chat.innerHTML += `<p><b>المساعد:</b> ${data.reply}</p>`;
+            } else {
+                chat.innerHTML += `<p><b>خطأ:</b> ${data.error}</p>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>مرحبا بك في المساعد الذكي</h1>
+    <div id="chat" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto;"></div>
+    <input id="userMessage" type="text" placeholder="اكتب رسالتك هنا..." style="width: 80%;">
+    <button onclick="sendMessage()">إرسال</button>
+</body>
+</html>
